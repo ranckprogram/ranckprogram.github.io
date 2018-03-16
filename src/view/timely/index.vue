@@ -20,9 +20,11 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
   .change-input {
     display: block;
+    padding: 0.2rem;
+    font-size: 0.16rem;
     width: 80%;
     margin: 35% auto 20%;
   }

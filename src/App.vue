@@ -3,7 +3,7 @@
     <div class="container">
       <router-view/>
     </div>
-    <v-menu></v-menu>
+    <v-menu @change="handleTab"></v-menu>
   </div>
 </template>
 
@@ -13,6 +13,11 @@ export default {
   name: 'App',
   components: {
     'v-menu': menu
+  },
+  methods: {
+    handleTab (item) {
+      this.$router.push({ name: item.route })
+    }
   }
 }
 </script>
@@ -21,10 +26,7 @@ export default {
   * {
     margin: 0;
     padding: 0;
-  }
-  html {
-    /*font-size: calc(100vw/3.75);*/
-    font-size: 50px;
+    box-sizing: border-box;
   }
   ul,li {
     list-style: none;

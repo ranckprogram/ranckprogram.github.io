@@ -3,7 +3,7 @@
     <div class="bottom-space"></div>
     <div class="bottom-menu">
       <ul>
-        <li v-for="(item, index) in menu" @click="handleTabMenu(index)" :key="index" :class="{active: index === curActive}">{{item.label}}</li>
+        <li v-for="(item, index) in menu" @click="handleTabMenu(index, item)" :key="index" :class="{active: index === curActive}">{{item.label}}</li>
       </ul>
     </div>
   </div>
@@ -12,7 +12,7 @@
 export default {
   data () {
     return {
-      curActive: 2,
+      curActive: 4,
       menu: [
         {
           label: '首页',
@@ -32,14 +32,15 @@ export default {
         },
         {
           label: '个人中心',
-          route: 'User'
+          route: 'UserCenter'
         }
       ]
     }
   },
   methods: {
-    handleTabMenu (index) {
+    handleTabMenu (index, item) {
       this.curActive = index
+      this.$emit('change', item)
     }
   }
 }
@@ -62,8 +63,8 @@ export default {
   .bottom-menu li {
     flex: 1;
     text-align: center;
-    line-height: .2rem;
-    padding: .1rem 0;
+    line-height: .4rem;
+    padding: .2rem 0;
     cursor: pointer;
   }
   .bottom-menu li.active {
