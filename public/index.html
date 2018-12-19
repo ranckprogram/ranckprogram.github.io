@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="start()">开始</button>
+    <button onclick="stop()">结束</button>
+    <button onclick="play()">播放</button>
+
+    <audio src=""></audio>
+    <canvas id="canvas"></canvas>
+    <script src="vudio.js"></script>
+    <script>
+        var record
+        var blob
+        var canvas = document.querySelector('#canvas')
+
+
+        var context = new AudioContext()
+        var microphone 
+        var processor = context.createScriptProcessor(16384, 1, 1) //js音频处理器
+
+        var audio = document.querySelector('audio');
+
+        function start() {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(function (mediaStream) {
+                console.dir(mediaStream)
+                // img.src = URL.createObjectURL(blob)
+                var vudio = new Vudio(mediaStream, canvas, {
+                    accuracy: 256,
+                    width: 1024,
+                    height: 200,
+                    waveform: {
+                        fadeSide: false,
+                        maxHeight: 200,
+                        verticalAlign: 'middle',
+                        horizontalAlign: 'center',
+                        color: '#2980b9'
+                    }
+                })
+
+                vudio.dance()
+
+                audio.src = URL.createObjectURL(blob);
+            audio.controls = true;
+            
+                microphone = context.createMediaStreamSource(mediaStream)
+                microphone.connect(processor);
+
+            }).catch(function (err) {
+                console.dir(err)
+            })
+        }
+
+        function stop() {
+            microphone.disconnect();
+            processor.disconnect();
+        }
+
+        function play() {
+
+            audio.src = URL.createObjectURL(blob);
+            audio.controls = true;
+        }
+    </script>
+</body>
+
+</html>
