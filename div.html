@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title></title>
+    <style lang="">
+        .input {
+            min-height: 40px;
+            width: 100%;
+            padding: 4px 12px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="add-content" class="input" contenteditable="true"></div>
+    <script>
+        var content = document.getElementById('add-content')
+        //注册中文的输入事件，
+        var isCN = false;
+        content.addEventListener('compositionstart', function () {
+            isCN = true;
+        });
+        content.addEventListener('compositionend', function () {
+            isCN = false;
+        })
+        //注册文本输入事件，获取光标的起止偏移数据,如果是非中文以及超出长度的输入，则撤销本次操作
+        var txtAnchorOffset, txtFocusOffset;
+        content.addEventListener("textInput", function (event) {
+            var _sel = document.getSelection();
+            txtAnchorOffset = _sel.anchorOffset;
+            txtFocusOffset = _sel.focusOffset;
+            //必须加上isCN的判断，否则获取不到正确的光标数据
+            if (!isCN && this.textContent.length >= noteMax) {
+                event.preventDefault();
+            }
+        });
+
+        //注册输入事件，对输入的数据进行
+        content.addEventListener("input", function (event) {
+            setTimeout(function () {
+                if (!isCN) {
+                    var _this = content;
+                    if (_this.textContent.length > noteMax) {
+                        var data = _this.textContent;
+                        oldDate = data.slice(0, txtAnchorOffset) + data.slice(txtFocusOffset, data.length);
+                        //再次截取最大长度字符串，防止溢出
+                        _this.textContent = oldDate.slice(0, noteMax);
+                    }
+                }
+            }, 0);
+        });
+
+        //注册输入事件，对输入的数据进行
+        content.addEventListener("input", function (event) {
+            setTimeout(function () {
+                if (!isCN) {
+                    var _this = content;
+                    if (_this.textContent.length > noteMax) {
+                        var data = _this.textContent;
+                        oldDate = data.slice(0, txtAnchorOffset) + data.slice(txtFocusOffset, data.length);
+                        //再次截取最大长度字符串，防止溢出
+                        _this.textContent = oldDate.slice(0, noteMax);
+                        //光标移动到起始偏移位置
+                        document.getSelection().collapse(_this.firstChild, txtAnchorOffset);
+                    }
+                }
+            }, 0);
+        });
+    </script>
+</body>
+
+</html>
